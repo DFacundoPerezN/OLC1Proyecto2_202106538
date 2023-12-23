@@ -129,8 +129,7 @@ public class Analizador {
         String html = inicioHTML;
         
         html +="\n\t<tr style=\"background-color: hotpink\">";
-        html +="\n\t<td>Lexema</td>\n" +
-        "\t\t<td>Identificador</td>\n" +
+        html +="\n\t<td>Identificador</td>\n" +
         "\t\t<td>Rol</td>\n" +
         "\t\t<td>Tipo</td>"+
         "\t\t<td>Entorno</td>"+

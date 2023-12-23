@@ -15,7 +15,7 @@ public class Proyecto2OCL2 {
      */
     public static void main(String[] args) {
         
-        new InterfazPrincipal().setVisible(true);
+        //new InterfazPrincipal().setVisible(true);
                 
         String p = "void mimetodo(){\n" +
 "	entero x=10;\n" +
@@ -47,8 +47,8 @@ public class Proyecto2OCL2 {
 "\n" +
 "ejecutar mimetodo();";
       
-        
-        //System.out.println(Analizador.TablaSimbolosHTML(p));
+        String html = Analizador.TablaSimbolosHTML(p);
+        //System.out.println(html);
     }
     
 }

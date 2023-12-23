@@ -2,10 +2,12 @@
 package Analizadores; 
 import java_cup.runtime.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import Estructuras.Simbolo;
+import Estructuras.AST;
 
 // 2. Codigo para el parser, variables, metodos 
 parser code 
@@ -76,24 +78,31 @@ ini::= entradas
 ;
 
 entradas ::= sentencias:a 
-            {: String salida="def main() :{\n " + a + "\n}\nf__name__ == : \n\tmain()";
-                RESULT=salida; 
-                salidas.add(salida);:}
+            {: AST e = new AST("entrada") ; 
+                e.hijos = ((List<AST>) a) ;  
+                System.out.println(e.hijos.size());
+                e.imprimirInfo(); //funcion para graficar arbol:}
             
 ;
 
-sentencias ::= sentencias:a sentencia:b {:RESULT=a + "\n"+b;:}
-              | sentencia:a  {:RESULT=a + "\n";:}
-              |sentencias:a error:b     {:RESULT= a + "\n #Error: "+b+"\n "+b;:}
+sentencias ::= sentencias:a sentencia:b {: List<AST> sentencias = (List<AST>)a ; 
+                                            sentencias.add((AST)b); 
+                                        RESULT=sentencias; :}
+              | sentencia:a  {:List<AST> inicial = new ArrayList<AST>(); 
+                        inicial.add((AST)a);
+                        RESULT = inicial;
+                        //System.out.println("--------: ()");
+                    :}
+              |sentencias:a error:b     {:RESULT= null;:}
 ; 
 
-metodo ::= PR_VOID ID:a PARIZQ elementos:b PARDER LLAVIZQ sentencias:c LLAVDER 
+metodo ::= PR_VOID ID:a PARIZQ elementos:b PARDER LLAVIZQ sentencias LLAVDER 
         {: simbolos.add(new Simbolo(a, "Metodo", "void","-", aleft, aright));
-        RESULT="def "+ a +"("+b+"):{\n"+c+"\n}"; :}
+        RESULT="Funcion "+ a +"("+b+"):{"+"}"; :}
 
-             |PR_VOID ID:a PARIZQ PARDER LLAVIZQ sentencias:c LLAVDER 
+             |PR_VOID ID:a PARIZQ PARDER LLAVIZQ sentencias LLAVDER 
         {: simbolos.add(new Simbolo(a, "Metodo", "void", "-", aleft, aright));
-        RESULT="def "+ a +"():{\n"+c+"\n}";  :}
+        RESULT="Funcion "+ a +"():{"+"}";  :}
 ;
 
 ejecutar ::= PR_EJECUTAR sentencia_llamar_metodo:a {:RESULT= "ejecutar " +a + "\n";:}
@@ -112,55 +121,55 @@ valor_double ::= DECIMAL:a {:RESULT=a;:}
 ;
 
 
-sentencia ::= sentencia_print:a     {:RESULT=a;:}
-            |sentencia_declaracion:a     {:RESULT=a;:}
+sentencia ::= sentencia_print:a     {:RESULT=new AST((String)a);:}
+            |sentencia_declaracion:a     {:RESULT=new AST((String)a);:}
 
-            | sentenciaIf:a   {:RESULT=a;:}
-            | sentenciaFor:a  {:RESULT=a;:}
-            | sentenciaSwitch:a  {:RESULT=a;:}
-            | sentenciaWhile:a   {:RESULT=a;:}
-            | sentenciaDoWhile:a   {:RESULT=a;:}
-            | sentencia_llamar_metodo:a   {:RESULT=a;:}
+            | sentenciaIf:a   {:RESULT=new AST((String)a);:}
+            | sentenciaFor:a  {:RESULT=new AST((String)a);:}
+            | sentenciaSwitch:a  {:RESULT=new AST((String)a);:}
+            | sentenciaWhile:a   {:RESULT=new AST((String)a);:}
+            | sentenciaDoWhile:a   {:RESULT=new AST((String)a);:}
+            | sentencia_llamar_metodo:a   {:RESULT=new AST((String)a);:}
 
-            | metodo:a     {:RESULT=a;:}
-            | ejecutar:a     {:RESULT=a;:}
-            //| expresion:a     {:RESULT=a;:}
+            | metodo:a     {:RESULT=new AST((String)a);:}
+            | ejecutar:a     {:RESULT=new AST((String)a);:}
+            //| expresion:a     {:RESULT=new AST((String)a);:}
 ;
 
-sentenciaIf ::= PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER {: RESULT="if "+ a +":{\n" + b + "\n}"; :}
-                |PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER sentenciaElse:c {: RESULT="if "+ a +":{\n" + b + "\n}"+c; :}
+sentenciaIf ::= PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias LLAVDER {: RESULT="if "+ a +":{\n"  + "\n}"; :}
+                |PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias LLAVDER sentenciaElse:c {: RESULT="if "+ a +":{\n"  + "\n}"+c; :}
 ;
 
-sentenciaElse ::= PR_SINO PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER  {: RESULT="\n elif "+ a +":{\n" + b + "\n}"; :}
-                |PR_SINO PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER  sentenciaElse:c {: RESULT="\nelif "+ a +":{\n" + b + "\n}"+c; :}
-                |PR_SINO LLAVIZQ sentencias:b LLAVDER  {: RESULT="else :{\n" + b + "\n}"; :}
+sentenciaElse ::= PR_SINO PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias LLAVDER  {: RESULT="\n elif "+ a +":{\n"  + "\n}"; :}
+                |PR_SINO PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias LLAVDER  sentenciaElse:c {: RESULT="\nelif "+ a +":{\n"  + "\n}"+c; :}
+                |PR_SINO LLAVIZQ sentencias LLAVDER  {: RESULT="else :{\n" + "\n}"; :}
 ;
 
-sentenciaFor ::= PR_PARA PARIZQ tipo_dato ID IGUAL expresion PTCOMA ID:a MENORQUE ENTERO:b PTCOMA ID MAS MAS PARDER LLAVIZQ sentencias:c LLAVDER 
-{: RESULT="for "+ a +" in range(1,"+b+"):{\n"+c+"\n}"; :}
-                |PR_PARA PARIZQ tipo_dato ID IGUAL expresion PTCOMA ID:a MENOROIGUAL ENTERO:b PTCOMA ID MAS MAS PARDER LLAVIZQ sentencias:c LLAVDER 
-                {: RESULT="for "+ a +" in range(1,"+b+"):{\n"+c+"\n}"; :}
+sentenciaFor ::= PR_PARA PARIZQ tipo_dato ID IGUAL expresion PTCOMA ID:a MENORQUE ENTERO:b PTCOMA ID MAS MAS PARDER LLAVIZQ sentencias LLAVDER 
+{: RESULT="for "+ a +" in range(1,"+b+"):{\n"+"\n}"; :}
+                |PR_PARA PARIZQ tipo_dato ID IGUAL expresion PTCOMA ID:a MENOROIGUAL ENTERO:b PTCOMA ID MAS MAS PARDER LLAVIZQ sentencias LLAVDER 
+                {: RESULT="for "+ a +" in range(1,"+b+"):{\n"+"\n}"; :}
 ;
 
 sentenciaSwitch ::= PR_SELECT PARIZQ ID:a PARDER LLAVIZQ sentenciasCase:b LLAVDER  
 {: RESULT="def switch(case, "+ a +"):{\n" + "switcher = { " + b + "\n} }"; :}
 ;
 
-sentenciasCase ::= PR_CASO expresion:a DOSPUNTOS sentencias:b usoBreak  sentenciasCase:c {: RESULT= a+": " + b+ ", \n " + c; :}
-                | PR_CASO expresion:a DOSPUNTOS sentencias:b usoBreak {: RESULT= a+": " + b+ ", \n "; :}
-                | PR_PDEFECT DOSPUNTOS sentencias:b usoBreak {: RESULT="4: " + b+ ","; :}
+sentenciasCase ::= PR_CASO expresion:a DOSPUNTOS sentencias usoBreak  sentenciasCase:c {: RESULT= a+": " +  ", \n " + c; :}
+                | PR_CASO expresion:a DOSPUNTOS sentencias usoBreak {: RESULT= a+": " +  ", \n "; :}
+                | PR_PDEFECT DOSPUNTOS sentencias usoBreak {: RESULT="4: " +  ","; :}
 ;
 usoBreak ::=  PR_CORTAR PTCOMA
 ;
 
-sentenciasExtra ::= ID:a IGUAL expresion:b PTCOMA sentencias:c {: RESULT=a+"=" + b+ ";\n"+c; :}
+sentenciasExtra ::= ID:a IGUAL expresion:b PTCOMA sentencias {: RESULT=a+"=" + b+ ";\n"; :}
 ;
 
-sentenciaWhile ::= PR_MIENTRAS PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER {: RESULT="while "+ a +":{\n" + b + "\n}"; :}
+sentenciaWhile ::= PR_MIENTRAS PARIZQ expresion:a PARDER LLAVIZQ sentencias LLAVDER {: RESULT="while "+ a +":{\n"  + "\n}"; :}
 ;
 
-sentenciaDoWhile ::= PR_HACER LLAVIZQ sentencias:b LLAVDER PR_MIENTRAS PARIZQ expresion:a PARDER PTCOMA
-    {: RESULT="while True:{"+ b +"if ("+a+"):{ \n break \n}"+"\n}"; :}
+sentenciaDoWhile ::= PR_HACER LLAVIZQ sentencias LLAVDER PR_MIENTRAS PARIZQ expresion:a PARDER PTCOMA
+    {: RESULT="while True:{" +"if ("+"):{ \n break \n}"+"\n}"; :}
 ;
 
 
