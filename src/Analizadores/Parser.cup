@@ -21,8 +21,7 @@ parser code
     public Map<String, Double> mapaDouble = new HashMap<>();    
     public Map<String, String> mapaString = new HashMap<>();
 
-
-
+    public String graph;
 :} 
 
 // 3. Terminales 
@@ -54,9 +53,11 @@ non terminal metodo, ejecutar;
 non terminal valor_string, valor_double;
 non terminal elementos_double;
 non terminal sentencia_print;
+non terminal actualizacion, incremento, decremento;
 non terminal sentencia_declaracion,sentencia_llamar_metodo;
 non terminal sentenciaIf, sentenciaElse, sentenciaSwitch, sentenciasCase,sentenciasExtra,usoBreak;
 non terminal sentenciaFor, sentenciaDoWhile, sentenciaWhile;
+non terminal lista_constructor;
 non terminal expresion;
 non terminal tipo_dato;
 non terminal lista;
@@ -81,7 +82,7 @@ entradas ::= sentencias:a
             {: AST e = new AST("entrada") ; 
                 e.hijos = ((List<AST>) a) ;  
                 System.out.println(e.hijos.size());
-                e.imprimirInfo(); //funcion para graficar arbol:}
+                e.imprimirInfo(); graph= e.infoGraphviz(0); System.out.println(graph); //funcion para graficar arbol:}
             
 ;
 
@@ -91,24 +92,31 @@ sentencias ::= sentencias:a sentencia:b {: List<AST> sentencias = (List<AST>)a ;
               | sentencia:a  {:List<AST> inicial = new ArrayList<AST>(); 
                         inicial.add((AST)a);
                         RESULT = inicial;
-                        //System.out.println("--------: ()");
                     :}
               |sentencias:a error:b     {:RESULT= null;:}
 ; 
 
-metodo ::= PR_VOID ID:a PARIZQ elementos:b PARDER LLAVIZQ sentencias LLAVDER 
+metodo ::= PR_VOID ID:a PARIZQ lista_constructor:b PARDER LLAVIZQ sentencias:c LLAVDER 
         {: simbolos.add(new Simbolo(a, "Metodo", "void","-", aleft, aright));
-        RESULT="Funcion "+ a +"("+b+"):{"+"}"; :}
+            AST metodo = new AST (a); metodo.hijos.add( (AST)b); metodo.hijos.addAll((List<AST>) c) ;  
+        RESULT=metodo; :}
 
-             |PR_VOID ID:a PARIZQ PARDER LLAVIZQ sentencias LLAVDER 
+             |PR_VOID ID:a PARIZQ PARDER LLAVIZQ sentencias:c LLAVDER 
         {: simbolos.add(new Simbolo(a, "Metodo", "void", "-", aleft, aright));
-        RESULT="Funcion "+ a +"():{"+"}";  :}
+        AST metodo = new AST (a); metodo.hijos.addAll((List<AST>) c) ;  
+        RESULT=metodo;   :}
 ;
 
-ejecutar ::= PR_EJECUTAR sentencia_llamar_metodo:a {:RESULT= "ejecutar " +a + "\n";:}
+lista_constructor ::= lista_constructor:a COMA tipo_dato:b ID:c 
+                {: List<AST> lista = (List<AST>)a; lista.add(new AST(b+" "+c)); 
+                    AST variables = new AST("variabels entrada"); variables.hijos = lista; RESULT=variables; :}
+                    |tipo_dato:a ID:b {: RESULT=List.of(a+" "+b); :}
+;
+
+ejecutar ::= PR_EJECUTAR sentencia_llamar_metodo:a {:RESULT= "ejecutar " +a;:}
 ; 
 
-sentencia_llamar_metodo ::= ID:a PARIZQ PARDER PTCOMA {:RESULT= a + "();\n";:}
+sentencia_llamar_metodo ::= ID:a PARIZQ PARDER PTCOMA {:RESULT= a + "();";:}
                 | ID:a PARIZQ elementos:b PARDER PTCOMA {:RESULT= a + "("+b+") \n";:}
 ; 
 
@@ -121,23 +129,30 @@ valor_double ::= DECIMAL:a {:RESULT=a;:}
 ;
 
 
-sentencia ::= sentencia_print:a     {:RESULT=new AST((String)a);:}
-            |sentencia_declaracion:a     {:RESULT=new AST((String)a);:}
+sentencia ::= sentencia_print:a     {:RESULT=a;:}
+            |sentencia_declaracion:a     {:RESULT= a ;:}
+            |actualizacion:a {:RESULT=a;:}
 
-            | sentenciaIf:a   {:RESULT=new AST((String)a);:}
-            | sentenciaFor:a  {:RESULT=new AST((String)a);:}
-            | sentenciaSwitch:a  {:RESULT=new AST((String)a);:}
-            | sentenciaWhile:a   {:RESULT=new AST((String)a);:}
+            | sentenciaIf:a   {:RESULT= new AST("si");:}
+            | sentenciaFor:a  {:RESULT=a;:}
+            | sentenciaSwitch:a  {:RESULT=a;:}
+            | sentenciaWhile:a   {:RESULT=a;:}
             | sentenciaDoWhile:a   {:RESULT=new AST((String)a);:}
             | sentencia_llamar_metodo:a   {:RESULT=new AST((String)a);:}
 
-            | metodo:a     {:RESULT=new AST((String)a);:}
+            | metodo:a     {:RESULT= a ;:}
             | ejecutar:a     {:RESULT=new AST((String)a);:}
             //| expresion:a     {:RESULT=new AST((String)a);:}
 ;
 
-sentenciaIf ::= PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias LLAVDER {: RESULT="if "+ a +":{\n"  + "\n}"; :}
-                |PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias LLAVDER sentenciaElse:c {: RESULT="if "+ a +":{\n"  + "\n}"+c; :}
+sentenciaIf ::= PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER 
+                    {: AST si = new AST("si"); AST exp = new AST("expresion"); exp.hijos.add((AST)a); si.hijos.add(exp) ;
+                        AST sen = new AST("sentencias"); sen.hijos = (List<AST>)b; si.hijos.add(sen); 
+                        RESULT=si; :}
+                |PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER sentenciaElse:c 
+                    {: AST si = new AST("si"); AST exp = new AST("expresion"); exp.hijos.add((AST)a); si.hijos.add(exp) ;
+                        AST sen = new AST("sentencias"); sen.hijos = (List<AST>)b; si.hijos.add(sen); 
+                        RESULT=si; :}
 ;
 
 sentenciaElse ::= PR_SINO PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias LLAVDER  {: RESULT="\n elif "+ a +":{\n"  + "\n}"; :}
@@ -145,19 +160,30 @@ sentenciaElse ::= PR_SINO PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias LLA
                 |PR_SINO LLAVIZQ sentencias LLAVDER  {: RESULT="else :{\n" + "\n}"; :}
 ;
 
-sentenciaFor ::= PR_PARA PARIZQ tipo_dato ID IGUAL expresion PTCOMA ID:a MENORQUE ENTERO:b PTCOMA ID MAS MAS PARDER LLAVIZQ sentencias LLAVDER 
-{: RESULT="for "+ a +" in range(1,"+b+"):{\n"+"\n}"; :}
-                |PR_PARA PARIZQ tipo_dato ID IGUAL expresion PTCOMA ID:a MENOROIGUAL ENTERO:b PTCOMA ID MAS MAS PARDER LLAVIZQ sentencias LLAVDER 
-                {: RESULT="for "+ a +" in range(1,"+b+"):{\n"+"\n}"; :}
+sentenciaFor ::= PR_PARA PARIZQ sentencia_declaracion:a  expresion:b PTCOMA actualizacion:c PARDER LLAVIZQ sentencias:d LLAVDER 
+            {: AST para = new AST("para"); para.hijos.add((AST) a);  AST cond = new AST("condicion"); cond.hijos.add((AST) b);  //System.out.println("para declaracion bien" );
+                para.hijos.add((AST) c);
+                AST sentencias =  new AST("sentencias"); sentencias.hijos = ((List<AST>) d); para.hijos.add(sentencias); 
+                RESULT=para; :}
 ;
 
 sentenciaSwitch ::= PR_SELECT PARIZQ ID:a PARDER LLAVIZQ sentenciasCase:b LLAVDER  
-{: RESULT="def switch(case, "+ a +"):{\n" + "switcher = { " + b + "\n} }"; :}
+    {: AST select = new AST("selector"); select.hijos.add(new AST(a));
+    AST casos = new AST("casos"); casos.hijos = (List<AST>)b; select.hijos.add(casos);
+    RESULT=select; :}
 ;
 
-sentenciasCase ::= PR_CASO expresion:a DOSPUNTOS sentencias usoBreak  sentenciasCase:c {: RESULT= a+": " +  ", \n " + c; :}
-                | PR_CASO expresion:a DOSPUNTOS sentencias usoBreak {: RESULT= a+": " +  ", \n "; :}
-                | PR_PDEFECT DOSPUNTOS sentencias usoBreak {: RESULT="4: " +  ","; :}
+sentenciasCase ::= PR_CASO expresion:a DOSPUNTOS sentencias:b usoBreak  sentenciasCase:c 
+                    {: AST caso = new AST("caso"); caso.hijos.add((AST)a);  AST exps = new AST("sentencias"); exps.hijos = ((List<AST>) b); caso.hijos.add(exps);
+                        List<AST> casos = new ArrayList<>(); casos.add(caso); System.out.println(casos.size());
+                        casos.addAll((List<AST>)c);  
+                        casos.add(caso);  RESULT=casos ;:}
+                | PR_CASO expresion:a DOSPUNTOS sentencias:b usoBreak 
+                    {: AST caso = new AST("caso"); caso.hijos.add((AST)a);  AST exps = new AST("sentencias"); exps.hijos = ((List<AST>) b); caso.hijos.add(exps);
+                        List<AST> salidas = List.of(caso); System.out.println("CASO con dato: "+salidas.get(0).dato); RESULT = salidas;:}
+                | PR_PDEFECT DOSPUNTOS sentencias:b usoBreak 
+                    {: AST pdefect = new AST("pordefecto"); AST exps = new AST("sentencias"); exps.hijos = ((List<AST>) b); pdefect.hijos.add(exps);
+                        List<AST> salidas = List.of(pdefect); System.out.println("PORDECETE con dato: "+salidas.get(0).hijos.get(0).dato); RESULT = salidas;:}
 ;
 usoBreak ::=  PR_CORTAR PTCOMA
 ;
@@ -165,7 +191,10 @@ usoBreak ::=  PR_CORTAR PTCOMA
 sentenciasExtra ::= ID:a IGUAL expresion:b PTCOMA sentencias {: RESULT=a+"=" + b+ ";\n"; :}
 ;
 
-sentenciaWhile ::= PR_MIENTRAS PARIZQ expresion:a PARDER LLAVIZQ sentencias LLAVDER {: RESULT="while "+ a +":{\n"  + "\n}"; :}
+sentenciaWhile ::= PR_MIENTRAS PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER 
+        {: AST mientras = new AST("mientras"); AST condicion = new AST("condicion"); condicion.hijos.add((AST)a); mientras.hijos.add(condicion);
+            AST sentencias = new AST("sentencias"); sentencias.hijos = (List<AST>)b; mientras.hijos.add(condicion);
+        RESULT=mientras; :}
 ;
 
 sentenciaDoWhile ::= PR_HACER LLAVIZQ sentencias LLAVDER PR_MIENTRAS PARIZQ expresion:a PARDER PTCOMA
@@ -175,20 +204,37 @@ sentenciaDoWhile ::= PR_HACER LLAVIZQ sentencias LLAVDER PR_MIENTRAS PARIZQ expr
 
 sentencia_print ::= PR_IMPRI PARIZQ expresion:a PARDER PTCOMA
     {:
-       System.out.println("Debo retornar esto POR CONSOLA: (" + a +");" );
+       System.out.println("Debo retornar esto POR CONSOLA: (" + ((AST)a).dato +");" ); AST impri = new AST("imprimir()"); impri.hijos.add((AST)a);
        //Inserto en la lista de salidas de la expresión evaluada
        //salidas.add("print(" + a + ")");
-       RESULT="print(" + a + ");";
+       RESULT=impri;
     :}
 ;
 
 sentencia_declaracion ::= tipo_dato:a ID:b IGUAL expresion:c PTCOMA 
-                                {: simbolos.add(new Simbolo(b, "Variable", (String) a, "global" , aleft, aright)); RESULT=a+" "+b.toString()+" = "+c+";\n" ;:}
+                                {: simbolos.add(new Simbolo(b, "Variable", (String) a, "global" , aleft, aright)); 
+                                    AST declara = new AST("declaracion"); declara.hijos.add(new AST((String)a)); 
+                                    declara.hijos.add(new AST(b)); declara.hijos.add((AST)c);
+                                    RESULT=declara ;:}
                         |ID:b IGUAL expresion:c PTCOMA {:RESULT=b+" = "+c+";\n";:}
                         |tipo_dato:a ID:b PTCOMA    {:RESULT=a+" "+b+";";:}
                         |tipo_dato:a CORIZQ CORDER ID:b IGUAL lista:c PTCOMA {:RESULT= a +" [] "+b+ " = " +c+ ";" ;:}
 ;
 
+actualizacion ::= incremento:a {:RESULT=a;:}
+                | decremento:a {:RESULT=a;:}
+;
+
+incremento ::= ID:a MAS MAS 
+                {:AST incremento = new AST("incremento"); incremento.hijos.add(new AST((String)a)); 
+                incremento.hijos.add(new AST("+")); incremento.hijos.add(new AST("+"));
+                RESULT=incremento ;:}    
+;
+decremento ::= ID:a MENOS MENOS 
+                {:AST decremento = new AST("declaracion"); decremento.hijos.add(new AST((String)a)); 
+                decremento.hijos.add(new AST("-")); decremento.hijos.add(new AST("-"));
+                RESULT=decremento ;:}    
+;
 
 lista ::= LLAVIZQ elementos:a LLAVDER {:RESULT="[" +a+ "]";:}
 ;
@@ -204,28 +250,28 @@ tipo_dato ::= PR_ENTERO    {:RESULT="entero";:}
             |PR_CHAR    {:RESULT="char";:}
 ;
 
-expresion ::= expresion:a MAS expresion:b {: RESULT = a + " + " + b; :}
-            | expresion:a POR expresion:b {: RESULT = a + " * " + b; :}
-            | expresion:a MENOS expresion:b {: RESULT = a + " - " + b; :}
-            | expresion:a POTENCIA expresion:b {: RESULT = a + " - " + b; :}
-            | expresion:a DIVIDIDO expresion:b {: RESULT = a + " / " + b; :}
+expresion ::= expresion:a MAS expresion:b {: AST mas = new AST("+"); mas.hijos.add((AST)a); mas.hijos.add((AST)b); RESULT = mas; :}
+            | expresion:a POR expresion:b {: AST por = new AST("*"); por.hijos.add((AST)a); por.hijos.add((AST)b); RESULT = por; :}
+            | expresion:a MENOS expresion:b {: AST men = new AST("-"); men.hijos.add((AST)a); men.hijos.add((AST)b); RESULT = men; :}
+            | expresion:a POTENCIA expresion:b {: AST pot = new AST("^"); pot.hijos.add((AST)a); pot.hijos.add((AST)b); RESULT = pot; :}
+            | expresion:a DIVIDIDO expresion:b {: AST div = new AST("/"); div.hijos.add((AST)a); div.hijos.add((AST)b); RESULT = div; :}
 
-            | expresion:a MAYORQUE expresion:b {: RESULT = a + " > " + b; :}
-            | expresion:a MENORQUE expresion:b {: RESULT = a + " < " + b; :}
-            | expresion:a MAYOROIGUAL expresion:b {: RESULT = a + " >= " + b; :}
-            | expresion:a MENOROIGUAL expresion:b {: RESULT = a + " <= " + b; :}
-            | expresion:a EQUALS expresion:b {: RESULT = a + " == " + b; :}
-            | expresion:a DISTINTO expresion:b {: RESULT = a + " != " + b; :}
+            | expresion:a MAYORQUE expresion:b {: AST may = new AST(">"); may.hijos.add((AST)a); may.hijos.add((AST)b); RESULT = may; :}
+            | expresion:a MENORQUE expresion:b {: AST men = new AST("<"); men.hijos.add((AST)a); men.hijos.add((AST)b); RESULT = men; :}
+            | expresion:a MAYOROIGUAL expresion:b {: AST mayi = new AST(">="); mayi.hijos.add((AST)a); mayi.hijos.add((AST)b); RESULT = mayi; :}
+            | expresion:a MENOROIGUAL expresion:b {: AST meni = new AST("<="); meni.hijos.add((AST)a); meni.hijos.add((AST)b); RESULT = meni; :}
+            | expresion:a EQUALS expresion:b {: AST eq = new AST("=="); eq.hijos.add((AST)a); eq.hijos.add((AST)b); RESULT = eq; :}
+            | expresion:a DISTINTO expresion:b {: AST dis = new AST("!="); dis.hijos.add((AST)a); dis.hijos.add((AST)b); RESULT = dis; :}
 
-            | expresion:a AND expresion:b {: RESULT = a + " and " + b; :}
-            | expresion:a OR expresion:b {: RESULT = a + " or " + b; :}
-            | NOT expresion:b {: RESULT = " not " + b; :}
+            | expresion:a AND expresion:b {: AST and = new AST("&&"); and.hijos.add((AST)a); and.hijos.add((AST)b); RESULT = and; :}
+            | expresion:a OR expresion:b {: AST or = new AST("||"); or.hijos.add((AST)a); or.hijos.add((AST)b); RESULT = or; :}
+            | NOT expresion:b {: AST not = new AST("!"); not.hijos.add((AST)b); RESULT = not; :}
 
-            | PARIZQ expresion:a PARDER {:RESULT="("+a+")";:} 
-            | ENTERO:a {: RESULT=a; :}
-            | DECIMAL:a {:RESULT=a;:}
-            | ID:a {:RESULT=a;:}
-            | STR:a {:RESULT=a.toString();:}
+            | PARIZQ expresion:a PARDER {:RESULT= new AST("("+a+")");:} 
+            | ENTERO:a {: RESULT= new AST(a); :}
+            | DECIMAL:a {:RESULT= new AST(a);:}
+            | ID:a {:RESULT= new AST(a);:}
+            | STR:a {:RESULT=new AST(a);:}
             | CHAR:a {:RESULT=a;:}
             | BOOLEANO:a {:RESULT=a;:}
 ;

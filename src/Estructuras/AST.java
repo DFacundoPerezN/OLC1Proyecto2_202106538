@@ -28,4 +28,34 @@ public class AST {
             //System.out.println("#de hijos de "+this.hijos.get(i).dato+ ": "+this.hijos.get(i).hijos.size());
         }
     }
+    
+    public String infoGraphviz(int contador){
+        int inicial = contador;
+        String salida ="";
+        salida += "n"+contador+"[label=\""+this.dato.replace("\"", "\\\"")+"\"];\n";
+        contador++;
+        
+        int i=0;
+        while( i<this.hijos.size() ){
+            
+            salida += "n"+(inicial)+" -> n"+(contador+i)+"\n";
+            
+            salida += hijos.get(i).infoGraphviz(contador+i);//(1+0)       (2+0)
+            
+            contador = contador +  hijos.get(i).crecimiento();
+            i++;
+        }        
+        return salida;
+    }  
+    
+    public int crecimiento(){
+        int c = 0;        
+            c = c + hijos.size();
+            
+        for( AST hijo : this.hijos){
+            c = c + hijo.crecimiento();
+        }        
+        return c;
+    }
+    
 }

@@ -24,14 +24,6 @@ public class Proyecto2OCL2 {
 "		imprimir(cad);\n" +
 "	}\n" +
 "\n" +
-"	selector(x){\n" +
-"		caso 1: \n" +
-"			imprimir(\"soy el caso 1\");\n" +
-"			cortar;\n" +
-"		pordefecto:\n" +
-"			imprimir(\"soy el caso por defecto\");\n" +
-"			cortar;\n" +
-"	}\n" +
 "	mimetodo2();\n" +
 "}\n" +
 "\n" +
@@ -46,9 +38,13 @@ public class Proyecto2OCL2 {
 "}\n" +
 "\n" +
 "ejecutar mimetodo();";
+        
+        String c = "para(entero i=0; i<10; i++){\n" +
+"		imprimir(i);\n" +
+"	}";
       
-        String html = Analizador.TablaSimbolosHTML(p);
-        //System.out.println(html);
+        String graf = Analizador.TablaSimbolosHTML(p);
+        //System.out.println(graf);
     }
     
 }
