@@ -1,7 +1,8 @@
 
-package proyecto2ocl2;
+package proyecto2olc1;
 import Analizadores.Parser;
 import Analizadores.Scanner;
+import Estructuras.AST;
 import Estructuras.Simbolo;
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -155,6 +156,8 @@ public class Analizador {
                 html +="</tr>";
             }
             
+            GuardarArchivo.Graph("AST", sintactico.graph);
+            
         }catch (Exception ex) {
             //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error fatal en compilación de entrada.");
@@ -164,6 +167,22 @@ public class Analizador {
         return html;
     }
     
-    
+    public AST ASTEntrada(String texto){
+        texto= reemplazarComentarios(texto);
+        Scanner lexico  = new Scanner(new BufferedReader( new StringReader(texto)));
+        Parser sintactico =new Parser(lexico);
+                try {   
+            //Se ejecuta el lexico y sintactico.            
+            sintactico.parse();
+            
+            GuardarArchivo.Graph("AST", sintactico.graph);
+            
+            return sintactico.entrada;
+        }catch (Exception ex) {
+            //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error fatal en compilación de entrada.");
+            return new AST("entrada");
+        }
+    }
 
 }

@@ -100,10 +100,10 @@ comentarioSimple = "//"(InputCharacter)*(LineTerminator)?
     return new Symbol(sym.PR_CHAR,yyline,yychar,yytext());     
 } 
 
-"console" {  
+"retorno" {  
     System.out.println("Reconocio PR: "+yytext()); 
-    //lexemas.add( new Lexema("console","Palabra Reservada",yyline,yychar));
-    return new Symbol(sym.PR_CONSOLE,yyline,yychar,yytext());     
+    //lexemas.add( new Lexema("retorno","Palabra Reservada",yyline,yychar));
+    return new Symbol(sym.PR_RETORNO,yyline,yychar,yytext());     
 } 
 
 "imprimir" {  

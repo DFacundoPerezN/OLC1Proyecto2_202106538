@@ -33,6 +33,7 @@ public class sym {
   public static final int PR_PDEFECT = 50;
   public static final int PR_PARA = 47;
   public static final int PR_EJECUTAR = 44;
+  public static final int PR_RETORNO = 42;
   public static final int ID = 30;
   public static final int EOF = 0;
   public static final int PARIZQ = 3;
@@ -60,7 +61,6 @@ public class sym {
   public static final int PR_SI = 45;
   public static final int PARDER = 4;
   public static final int CORIZQ = 8;
-  public static final int PR_CONSOLE = 42;
   public static final int PR_MAIN = 35;
   public static final int MAS = 14;
   public static final String[] terminalNames = new String[] {
@@ -106,7 +106,7 @@ public class sym {
   "PR_CHAR",
   "PR_DOBLE",
   "PR_BIN",
-  "PR_CONSOLE",
+  "PR_RETORNO",
   "PR_IMPRI",
   "PR_EJECUTAR",
   "PR_SI",

@@ -16,6 +16,8 @@ public class Simbolo {
     public int linea;
     public int columna;
     
+    public String valor = "";
+    
     public Simbolo(String identificador, String rol, String tipo,String entorno, int linea, int columna){
         this.iden = identificador;
         this.rol = rol;

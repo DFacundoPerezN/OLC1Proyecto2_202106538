@@ -1,5 +1,5 @@
 
-package proyecto2ocl2;
+package proyecto2olc1;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
