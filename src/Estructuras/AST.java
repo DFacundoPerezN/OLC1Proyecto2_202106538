@@ -108,7 +108,7 @@ public class AST {
             }
            case "%" -> {
                if( hijos.get(0).getValor().matches("[0-9]+")){
-                   double number = Integer.valueOf(hijos.get(0).getValor())%Integer.valueOf(hijos.get(1).getValor()) ;
+                   int number = Integer.valueOf(hijos.get(0).getValor()) % Integer.valueOf(hijos.get(1).getValor()) ;
                    return String.valueOf(number);
                }
                 double number = Double.parseDouble(hijos.get(0).getValor())% Double.parseDouble(hijos.get(1).getValor()) ;
@@ -126,22 +126,23 @@ public class AST {
                }
                 return "false";
             }case ">" -> {
-               if( Integer.valueOf(hijos.get(0).getValor()) > Integer.valueOf(hijos.get(1).getValor())){
+                System.out.println("Comparando: "+hijos.get(0).getValor()+" y "+hijos.get(1).dato);
+               if( Double.parseDouble(hijos.get(0).getValor()) > Double.parseDouble(hijos.get(1).getValor())){
                    return "true";
                }
                 return "false";
             }case "<" -> {
-               if( Integer.valueOf(hijos.get(0).getValor()) < Integer.valueOf(hijos.get(1).getValor())){
+               if( Double.parseDouble(hijos.get(0).getValor()) < Double.parseDouble(hijos.get(1).getValor())){
                    return "true";
                }
                 return "false";
             }case ">=" -> {
-               if( Integer.valueOf(hijos.get(0).getValor()) >= Integer.valueOf(hijos.get(1).getValor())){
+               if( Double.parseDouble(hijos.get(0).getValor()) >= Double.parseDouble(hijos.get(1).getValor())){
                    return "true";
                }
                 return "false";
             }case "<=" -> {
-               if( Integer.valueOf(hijos.get(0).getValor()) <= Integer.valueOf(hijos.get(1).getValor())){
+               if( Double.parseDouble(hijos.get(0).getValor()) <= Double.parseDouble(hijos.get(1).getValor())){
                    return "true";
                }
                 return "false";
@@ -162,14 +163,18 @@ public class AST {
                    return "false";
                }
                 return "true";
-            }case "true"->{
+            }
+            //especiales
+            case "true"->{
                 return "true";
             }case "false"->{
                 return "false";
+            }case "()"->{
+                return  hijos.get(0).getValor();
             }
             //ojala salga bien papi
            default -> {
-                if(this.dato.contains("\"") || this.dato.matches("[0-9.]+")){
+                if(this.dato.contains("\"") || this.dato.contains("\'") || this.dato.matches("[0-9.]+")){
                         return this.dato;
                  }else{
                          return getValorfromSimbolo(dato);
@@ -200,11 +205,11 @@ public class AST {
                 }
             case "si" -> {
                 Interprete inter = new Interprete(sentencia, this.simbolos);
-                salidas += "\n"+inter.ejecutarSentenciaIf();
+                salidas += inter.ejecutarSentenciaIf();
                 }
             case "mientras" -> {
                 Interprete inter = new Interprete(sentencia, this.simbolos);
-                salidas += "\n"+inter.ejecutarSentenciaWhile();
+                salidas += inter.ejecutarSentenciaWhile();
                 }
             case "incremento" -> {
                 for(Simbolo sim: Analizadores.Parser.simbolos){
@@ -227,8 +232,14 @@ public class AST {
             case "declaracion" -> {
                 for(Simbolo sim: Analizadores.Parser.simbolos){
                     if(sim.iden.equals(sentencia.hijos.get(1).dato)){
-                        String cambiada = sentencia.hijos.get(2).getValor();
-                        sim.valor = cambiada;
+                        if(sentencia.hijos.size()>2){
+                            String cambiada = sentencia.hijos.get(2).getValor();
+                            sim.valor = cambiada;
+                        }else{
+                            System.out.println("default of "+sentencia.hijos.get(0).dato+" " +Interprete.defaults.get(sentencia.hijos.get(0).getValor()));
+                            String cambiada = Interprete.defaults.get(sentencia.hijos.get(0).dato);
+                            sim.valor = cambiada;
+                        }
                     }
                 }
             }

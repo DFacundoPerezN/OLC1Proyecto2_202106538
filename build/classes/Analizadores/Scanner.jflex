@@ -253,6 +253,10 @@ comentarioSimple = "//"(InputCharacter)*(LineTerminator)?
 "^" {
     //lexemas.add( new Lexema("^","Operador Potencia",yyline,yychar));
     return new Symbol(sym.POTENCIA,yyline,yychar,yytext());
+}   
+"%" {
+    //lexemas.add( new Lexema("^","Operador Modulo",yyline,yychar));
+    return new Symbol(sym.MODULO,yyline,yychar,yytext());
 } 
 "<" {
     //lexemas.add( new Lexema(yytext(),"Operador Menorque",yyline,yychar));

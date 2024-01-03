@@ -242,7 +242,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         }catch (Exception ex) {
             //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error fatal en compilación de entrada.");
-            consola = "//No lobre compilar el archivo";
+            consola = "//Error sintactico no deja compilar el archivo";
         }
         jTextArea2.setText(consola);
 

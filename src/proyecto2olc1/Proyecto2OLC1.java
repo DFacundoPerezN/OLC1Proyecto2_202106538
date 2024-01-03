@@ -111,8 +111,41 @@ public class Proyecto2OLC1 {
 "}}"+
 "ejecutar mimetodo();";        
         
-        //String graf = Analizador.TablaSimbolosHTML(n);
-        //String ass = Analizador.Salidas(n); System.out.println("---------Consola----------\n"+ass+"\n---------Fin consola----------");
+        String c = "void metodo1(){\n" +
+"\n" +
+"	entero x = 1;\n" +
+"	binario bandera;\n" +
+"	doble y=10.5;\n" +
+"	\n" +
+"	mientras(x<10){\n" +
+"		y = y*2;\n" +
+"		x = x+1;\n" +
+"	}\n" +
+"	imprimir(y);\n" +
+"	\n" +
+"	si( (bandera == false) || (y > 10.5) ){\n" +
+"		y = y/2;\n" +
+"		imprimir(y);\n" +
+"	}\n metodo2();" +
+"} "
+                + "void metodo2(){"
+                + "cadena cad = \"hola mundo\";\n" +
+"	caracter ca = 'x';\n" +
+"	entero h = 10;"
+                + "si((ca == 'x') && (h <= 10)){\n" +
+"		imprimir(ca);\n" +
+"		ca = 'a';\n" +
+"	}"+ 
+        "h = h-5;\n" +
+"	imprimir(h);\n" +
+"	imprimir(ca);\n" +
+"	imprimir(cad);"
+                + "}"+
+"\n" +
+"ejecutar metodo1();";
+        
+        //String graf = Analizador.TablaSimbolosHTML(s);
+        //String ass = Analizador.Salidas(c); System.out.println("---------Consola----------\n"+ass+"\n---------Fin consola----------");
     }
     
 }

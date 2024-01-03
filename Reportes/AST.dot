@@ -22,81 +22,215 @@ n8 -> n9
 n9[label="binario"];
 n8 -> n10
 n10[label="bandera"];
-n8 -> n11
-n11[label="false"];
-n3 -> n12
-n12[label="declaracion"];
-n12 -> n13
-n13[label="doble"];
-n12 -> n14
-n14[label="y"];
-n12 -> n15
-n15[label="10.5"];
-n3 -> n16
-n16[label="mientras"];
+n3 -> n11
+n11[label="declaracion"];
+n11 -> n12
+n12[label="doble"];
+n11 -> n13
+n13[label="y"];
+n11 -> n14
+n14[label="10.5"];
+n3 -> n15
+n15[label="mientras"];
+n15 -> n16
+n16[label="condicion"];
 n16 -> n17
-n17[label="condicion"];
+n17[label="<"];
 n17 -> n18
-n18[label="<"];
-n18 -> n19
-n19[label="x"];
-n18 -> n20
-n20[label="10"];
-n16 -> n21
-n21[label="sentencias"];
+n18[label="x"];
+n17 -> n19
+n19[label="10"];
+n15 -> n20
+n20[label="sentencias"];
+n20 -> n21
+n21[label="definicion"];
 n21 -> n22
-n22[label="definicion"];
-n22 -> n23
-n23[label="y"];
-n22 -> n24
-n24[label="*"];
-n24 -> n25
-n25[label="y"];
-n24 -> n26
-n26[label="2"];
-n21 -> n27
-n27[label="definicion"];
-n27 -> n28
-n28[label="x"];
-n27 -> n29
-n29[label="+"];
-n29 -> n30
-n30[label="x"];
-n29 -> n31
-n31[label="1"];
-n3 -> n32
-n32[label="imprimir()"];
-n32 -> n33
-n33[label="y"];
-n3 -> n34
-n34[label="si"];
+n22[label="y"];
+n21 -> n23
+n23[label="*"];
+n23 -> n24
+n24[label="y"];
+n23 -> n25
+n25[label="2"];
+n20 -> n26
+n26[label="definicion"];
+n26 -> n27
+n27[label="x"];
+n26 -> n28
+n28[label="+"];
+n28 -> n29
+n29[label="x"];
+n28 -> n30
+n30[label="1"];
+n3 -> n31
+n31[label="imprimir()"];
+n31 -> n32
+n32[label="y"];
+n3 -> n33
+n33[label="si"];
+n33 -> n34
+n34[label="expresion"];
 n34 -> n35
-n35[label="expresion"];
+n35[label="&&"];
 n35 -> n36
-n36[label="=="];
+n36[label="()"];
 n36 -> n37
-n37[label="bandera"];
-n36 -> n38
-n38[label="false"];
-n34 -> n39
-n39[label="sentencias"];
-n39 -> n40
-n40[label="metodo2()"];
-n39 -> n41
-n41[label="definicion"];
+n37[label="=="];
+n37 -> n38
+n38[label="bandera"];
+n37 -> n39
+n39[label="false"];
+n35 -> n40
+n40[label="()"];
+n40 -> n41
+n41[label=">"];
 n41 -> n42
 n42[label="y"];
 n41 -> n43
-n43[label="/"];
-n43 -> n44
-n44[label="y"];
-n43 -> n45
-n45[label="2"];
-n39 -> n46
-n46[label="imprimir()"];
+n43[label="10.5"];
+n33 -> n44
+n44[label="sentencias"];
+n44 -> n45
+n45[label="metodo2()"];
+n44 -> n46
+n46[label="definicion"];
 n46 -> n47
 n47[label="y"];
-n1 -> n48
-n48[label="ejecutar metodo1()"];
+n46 -> n48
+n48[label="/"];
+n48 -> n49
+n49[label="y"];
+n48 -> n50
+n50[label="2"];
+n44 -> n51
+n51[label="imprimir()"];
+n51 -> n52
+n52[label="y"];
+n33 -> n53
+n53[label="sino"];
+n53 -> n54
+n54[label="sentencias"];
+n54 -> n55
+n55[label="imprimir()"];
+n55 -> n56
+n56[label="\"no cumplio ninguna\""];
+n33 -> n57
+n57[label="sino si"];
+n57 -> n58
+n58[label="condicion"];
+n58 -> n59
+n59[label="=="];
+n59 -> n60
+n60[label="bandera"];
+n59 -> n61
+n61[label="false"];
+n57 -> n62
+n62[label="sentencias"];
+n62 -> n63
+n63[label="imprimir()"];
+n63 -> n64
+n64[label="\"cumplio (bandera == false)\""];
+n33 -> n65
+n65[label="sino si"];
+n65 -> n66
+n66[label="condicion"];
+n66 -> n67
+n67[label=">"];
+n67 -> n68
+n68[label="y"];
+n67 -> n69
+n69[label="10.5"];
+n65 -> n70
+n70[label="sentencias"];
+n70 -> n71
+n71[label="imprimir()"];
+n71 -> n72
+n72[label="\"cumplio (y > 10.5)\""];
+n1 -> n73
+n73[label="void metodo2()"];
+n73 -> n74
+n74[label="sentencias"];
+n74 -> n75
+n75[label="declaracion"];
+n75 -> n76
+n76[label="cadena"];
+n75 -> n77
+n77[label="cad"];
+n75 -> n78
+n78[label="\"hola mundo\""];
+n74 -> n79
+n79[label="declaracion"];
+n79 -> n80
+n80[label="char"];
+n79 -> n81
+n81[label="ca"];
+n79 -> n82
+n82[label="'x'"];
+n74 -> n83
+n83[label="declaracion"];
+n83 -> n84
+n84[label="entero"];
+n83 -> n85
+n85[label="h"];
+n83 -> n86
+n86[label="10"];
+n74 -> n87
+n87[label="si"];
+n87 -> n88
+n88[label="expresion"];
+n88 -> n89
+n89[label="&&"];
+n89 -> n90
+n90[label="()"];
+n90 -> n91
+n91[label="=="];
+n91 -> n92
+n92[label="ca"];
+n91 -> n93
+n93[label="'x'"];
+n89 -> n94
+n94[label="()"];
+n94 -> n95
+n95[label="<="];
+n95 -> n96
+n96[label="h"];
+n95 -> n97
+n97[label="10"];
+n87 -> n98
+n98[label="sentencias"];
+n98 -> n99
+n99[label="imprimir()"];
+n99 -> n100
+n100[label="ca"];
+n98 -> n101
+n101[label="definicion"];
+n101 -> n102
+n102[label="ca"];
+n101 -> n103
+n103[label="'a'"];
+n74 -> n104
+n104[label="definicion"];
+n104 -> n105
+n105[label="h"];
+n104 -> n106
+n106[label="-"];
+n106 -> n107
+n107[label="h"];
+n106 -> n108
+n108[label="5"];
+n74 -> n109
+n109[label="imprimir()"];
+n109 -> n110
+n110[label="h"];
+n74 -> n111
+n111[label="imprimir()"];
+n111 -> n112
+n112[label="ca"];
+n74 -> n113
+n113[label="imprimir()"];
+n113 -> n114
+n114[label="cad"];
+n1 -> n115
+n115[label="ejecutar metodo1()"];
 }
 }

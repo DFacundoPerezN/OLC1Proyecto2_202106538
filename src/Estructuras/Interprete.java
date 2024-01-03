@@ -6,6 +6,8 @@ package Estructuras;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import static java.util.Map.entry;
 
 /**
  *
@@ -22,7 +24,7 @@ public class Interprete {
     
     public String ejecutarSentenciaImprimir(){
             String mensaje = this.arbolSintactico.hijos.get(0).dato;
-            if(mensaje.contains("\"")){
+            if(mensaje.contains("\"")|| mensaje.contains("\'") || mensaje.equals("true") || mensaje.equals("false")){
                 return mensaje.replace("\"","");
             }else{
                    //System.out.println(mensaje+this.simbolos.size());
@@ -39,9 +41,21 @@ public class Interprete {
     public String ejecutarSentenciaIf(){
         //System.out.println(simbolos.size());
         String salida = "";
-        String  condicion = this.arbolSintactico.hijos.get(0).hijos.get(0).getValor();        
+        String condicion = this.arbolSintactico.hijos.get(0).hijos.get(0).getValor();    
+        System.out.println("la condicion es: "+ condicion);
         if( condicion.contains("rue")){
             salida += this.arbolSintactico.hijos.get(1).EjecutarSentencias(this.arbolSintactico);
+        }
+        else{
+            for (int i=this.arbolSintactico.hijos.size(); i>2; i--){
+                AST extraSino= this.arbolSintactico.hijos.get(i-1);
+                if(extraSino.dato.equals("sino")){
+                    salida += extraSino.hijos.get(0).EjecutarSentencias(extraSino); 
+                }else{
+                    Interprete inter = new Interprete(extraSino, this.simbolos);
+                    salida += inter.ejecutarSentenciaIf();
+                }
+            }
         }
         return salida;
     }
@@ -60,6 +74,8 @@ public class Interprete {
         return salida;
     }
     
-    
+    public static Map<String,String> defaults = Map.ofEntries(
+            entry("entero","0"), entry("doble","0.0"), entry("binario","true"), entry("caracter","'\\u0000'"), entry("cadena","\"\"")
+    );
     
 }

@@ -36,7 +36,7 @@ terminal String DECIMAL;
 terminal String BOOLEANO;
 terminal String ID;
 terminal String STR,CHAR;
-terminal String POTENCIA;
+terminal String POTENCIA, MODULO;
 terminal String PR_VOID;
 terminal String PR_MAIN,PR_DGLOBALES ;
 terminal String PR_ENTERO;
@@ -68,7 +68,7 @@ non terminal miembro;
 
 // 5. Precedencias
 precedence nonassoc POTENCIA;
-precedence left POR,DIVIDIDO;
+precedence left POR,DIVIDIDO,MODULO;
 precedence left MAS,MENOS,COMA;
 precedence left  MENORQUE,MAYORQUE,EQUALS,MAYOROIGUAL,MENOROIGUAL,DISTINTO;
 precedence left AND,OR;
@@ -175,12 +175,12 @@ sentenciaIf ::= PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER
 ;
 
 sentenciasElse ::= PR_SINO PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER  
-                    {: AST sino = new AST("sino si"); AST condicion = new AST("condicion"); condicion.hijos.add((AST) a); sino.hijos.add(sino);
+                    {: AST sino = new AST("sino si"); AST condicion = new AST("condicion"); condicion.hijos.add((AST) a); sino.hijos.add(condicion);
                         AST sentencias = new AST("sentencias"); sentencias.hijos = ((List<AST>) b); sino.hijos.add(sentencias);
                         List<AST> listaElse =  new ArrayList<AST>(); listaElse.add(sino);
                         RESULT=listaElse; :}
                 |PR_SINO PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b LLAVDER  sentenciasElse:c  {: AST sino = new AST("sino si");
-                        AST condicion = new AST("condicion"); condicion.hijos.add((AST) a); sino.hijos.add(sino);
+                        AST condicion = new AST("condicion"); condicion.hijos.add((AST) a); sino.hijos.add(condicion);
                         AST sentencias = new AST("sentencias"); sentencias.hijos = ((List<AST>) b); sino.hijos.add(sentencias);
                         List<AST> listaElse =  ((List<AST>) c); listaElse.add(sino);
                         RESULT=listaElse; :}
@@ -293,6 +293,7 @@ expresion ::= expresion:a MAS expresion:b {: AST mas = new AST("+"); mas.hijos.a
             | expresion:a POR expresion:b {: AST por = new AST("*"); por.hijos.add((AST)a); por.hijos.add((AST)b); RESULT = por; :}
             | expresion:a MENOS expresion:b {: AST men = new AST("-"); men.hijos.add((AST)a); men.hijos.add((AST)b); RESULT = men; :}
             | expresion:a POTENCIA expresion:b {: AST pot = new AST("^"); pot.hijos.add((AST)a); pot.hijos.add((AST)b); RESULT = pot; :}
+            | expresion:a MODULO expresion:b {: AST pot = new AST("%"); pot.hijos.add((AST)a); pot.hijos.add((AST)b); RESULT = pot; :}
             | expresion:a DIVIDIDO expresion:b {: AST div = new AST("/"); div.hijos.add((AST)a); div.hijos.add((AST)b); RESULT = div; :}
 
             | expresion:a MAYORQUE expresion:b {: AST may = new AST(">"); may.hijos.add((AST)a); may.hijos.add((AST)b); RESULT = may; :}
@@ -306,7 +307,7 @@ expresion ::= expresion:a MAS expresion:b {: AST mas = new AST("+"); mas.hijos.a
             | expresion:a OR expresion:b {: AST or = new AST("||"); or.hijos.add((AST)a); or.hijos.add((AST)b); RESULT = or; :}
             | NOT expresion:b {: AST not = new AST("!"); not.hijos.add((AST)b); RESULT = not; :}
 
-            | PARIZQ expresion:a PARDER {: AST par = new AST("()"); par.hijos.add(new AST((String)a));RESULT= par ;:} 
+            | PARIZQ expresion:a PARDER {: AST par = new AST("()"); par.hijos.add((AST)a); RESULT= par ;:} 
             | ENTERO:a {: RESULT= new AST(a); :}
             | DECIMAL:a {:RESULT= new AST(a);:}
             | ID:a {:RESULT= new AST(a);:}

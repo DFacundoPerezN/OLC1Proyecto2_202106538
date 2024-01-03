@@ -191,7 +191,7 @@ public class Analizador {
         }catch (Exception ex) {
             //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error fatal en compilación de entrada.");
-            return ("entrada");
+            return ("/* Fallo a la hora de compilar el archivo */");
         }
     }
 
