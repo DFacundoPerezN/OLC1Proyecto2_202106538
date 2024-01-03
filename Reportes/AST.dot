@@ -5,124 +5,98 @@ n0[label="Entrada"];
 n0 -> n1
 n1[label="sentencias"];
 n1 -> n2
-n2[label="void mimetodo"];
+n2[label="void metodo1()"];
 n2 -> n3
-n3[label="declaracion"];
+n3[label="sentencias"];
 n3 -> n4
-n4[label="entero"];
-n3 -> n5
-n5[label="x"];
-n3 -> n6
-n6[label="10"];
-n2 -> n7
-n7[label="declaracion"];
-n7 -> n8
-n8[label="cadena"];
-n7 -> n9
-n9[label="cad"];
-n7 -> n10
-n10[label="\"holamundo\""];
-n2 -> n11
-n11[label="si"];
-n11 -> n12
-n12[label="expresion"];
+n4[label="declaracion"];
+n4 -> n5
+n5[label="entero"];
+n4 -> n6
+n6[label="x"];
+n4 -> n7
+n7[label="1"];
+n3 -> n8
+n8[label="declaracion"];
+n8 -> n9
+n9[label="binario"];
+n8 -> n10
+n10[label="bandera"];
+n8 -> n11
+n11[label="false"];
+n3 -> n12
+n12[label="declaracion"];
 n12 -> n13
-n13[label="=="];
-n13 -> n14
-n14[label="x"];
-n13 -> n15
-n15[label="10"];
-n11 -> n16
-n16[label="sentencias"];
+n13[label="doble"];
+n12 -> n14
+n14[label="y"];
+n12 -> n15
+n15[label="10.5"];
+n3 -> n16
+n16[label="mientras"];
 n16 -> n17
-n17[label="imprimir()"];
+n17[label="condicion"];
 n17 -> n18
-n18[label="cad"];
-n2 -> n19
-n19[label="mimetodo2()"];
-n1 -> n20
-n20[label="void mimetodo2"];
-n20 -> n21
-n21[label="parametros"];
+n18[label="<"];
+n18 -> n19
+n19[label="x"];
+n18 -> n20
+n20[label="10"];
+n16 -> n21
+n21[label="sentencias"];
 n21 -> n22
-n22[label="entero h"];
-n20 -> n23
-n23[label="sentencias"];
-n23 -> n24
-n24[label="declaracion"];
+n22[label="definicion"];
+n22 -> n23
+n23[label="y"];
+n22 -> n24
+n24[label="*"];
 n24 -> n25
-n25[label="entero"];
+n25[label="y"];
 n24 -> n26
-n26[label="h"];
-n24 -> n27
-n27[label="0"];
-n23 -> n28
-n28[label="mientras"];
-n28 -> n29
-n29[label="condicion"];
+n26[label="2"];
+n21 -> n27
+n27[label="definicion"];
+n27 -> n28
+n28[label="x"];
+n27 -> n29
+n29[label="+"];
 n29 -> n30
-n30[label="<"];
-n30 -> n31
-n31[label="h"];
-n30 -> n32
-n32[label="10"];
-n28 -> n33
-n33[label="sentencias"];
-n33 -> n34
-n34[label="imprimir()"];
+n30[label="x"];
+n29 -> n31
+n31[label="1"];
+n3 -> n32
+n32[label="imprimir()"];
+n32 -> n33
+n33[label="y"];
+n3 -> n34
+n34[label="si"];
 n34 -> n35
-n35[label="h"];
-n23 -> n36
-n36[label="para"];
+n35[label="expresion"];
+n35 -> n36
+n36[label="=="];
 n36 -> n37
-n37[label="declaracion"];
-n37 -> n38
-n38[label="entero"];
-n37 -> n39
-n39[label="i"];
-n37 -> n40
-n40[label="0"];
-n36 -> n41
-n41[label="incremento"];
+n37[label="bandera"];
+n36 -> n38
+n38[label="false"];
+n34 -> n39
+n39[label="sentencias"];
+n39 -> n40
+n40[label="metodo2()"];
+n39 -> n41
+n41[label="definicion"];
 n41 -> n42
-n42[label="i"];
+n42[label="y"];
 n41 -> n43
-n43[label="+"];
-n41 -> n44
-n44[label="+"];
-n36 -> n45
-n45[label="sentencias"];
-n45 -> n46
+n43[label="/"];
+n43 -> n44
+n44[label="y"];
+n43 -> n45
+n45[label="2"];
+n39 -> n46
 n46[label="imprimir()"];
 n46 -> n47
-n47[label="i"];
+n47[label="y"];
 n1 -> n48
-n48[label="ejecutar mimetodo()"];
-n1 -> n49
-n49[label="entero suma"];
-n49 -> n50
-n50[label="parametros"];
-n50 -> n51
-n51[label="entero x"];
-n50 -> n52
-n52[label="entero y"];
-n49 -> n53
-n53[label="sentencias"];
-n53 -> n54
-n54[label="declaracion"];
-n54 -> n55
-n55[label="entero"];
-n54 -> n56
-n56[label="result"];
-n54 -> n57
-n57[label="+"];
-n57 -> n58
-n58[label="x"];
-n57 -> n59
-n59[label="y"];
-n49 -> n60
-n60[label="retorno"];
-n60 -> n61
-n61[label="result"];
+n48[label="ejecutar metodo1()"];
 }
 }

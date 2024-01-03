@@ -3,6 +3,7 @@ package proyecto2olc1;
 import Analizadores.Parser;
 import Analizadores.Scanner;
 import Estructuras.AST;
+import Estructuras.Interprete;
 import Estructuras.Simbolo;
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -20,8 +21,8 @@ public class Analizador {
             System.out.println("Comentario ignorado: '"+comentario+ "'");
         }
         
-        while (texto.contains("<!") && texto.contains("!>")){
-            comentario = texto.substring(texto.indexOf("<!"),texto.indexOf("!>")+2); //el comentario empieza con la cadena */ y termina con */
+        while (texto.contains("/*") && texto.contains("*/")){
+            comentario = texto.substring(texto.indexOf("/*"),texto.indexOf("*/")+2); //el comentario empieza con la cadena */ y termina con */
             
             int cantidadSaltos = comentario.split("\n").length;
             String saltos =" ";
@@ -167,21 +168,30 @@ public class Analizador {
         return html;
     }
     
-    public AST ASTEntrada(String texto){
+    public static String Salidas(String texto){
+        String consola = "";
+        
         texto= reemplazarComentarios(texto);
         Scanner lexico  = new Scanner(new BufferedReader( new StringReader(texto)));
         Parser sintactico =new Parser(lexico);
                 try {   
             //Se ejecuta el lexico y sintactico.            
             sintactico.parse();
+                    //System.out.println(sintactico.simbolos.size());
+            //sintactico.entrada.simbolos = sintactico.simbolos;
+            GuardarArchivo.Graph("AST", sintactico.graph);     
             
-            GuardarArchivo.Graph("AST", sintactico.graph);
+            AST arbol = sintactico.entrada;
+            arbol.simbolos = sintactico.simbolos;
             
-            return sintactico.entrada;
+                    //System.out.println(arbol.simbolos.size());
+            consola += arbol.Ejecutar();
+            return consola;
+            
         }catch (Exception ex) {
             //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error fatal en compilación de entrada.");
-            return new AST("entrada");
+            return ("entrada");
         }
     }
 

@@ -16,7 +16,7 @@ parser code
     //Creo una lista de tipo String llamada 'salidas', donde guardare cada uno de las salidas analizadas
     //Para el proyecto se sugiere HashMap
     public List<String> salidas = new ArrayList<String>();
-    public List<Simbolo> simbolos = new ArrayList<Simbolo>();
+    public static List<Simbolo> simbolos = new ArrayList<Simbolo>();
 
     public Map<String, Double> mapaDouble = new HashMap<>();    
     public Map<String, String> mapaString = new HashMap<>();
@@ -68,8 +68,8 @@ non terminal miembro;
 
 // 5. Precedencias
 precedence nonassoc POTENCIA;
-precedence left MAS,MENOS,COMA;
 precedence left POR,DIVIDIDO;
+precedence left MAS,MENOS,COMA;
 precedence left  MENORQUE,MAYORQUE,EQUALS,MAYOROIGUAL,MENOROIGUAL,DISTINTO;
 precedence left AND,OR;
 precedence right NOT; 
@@ -81,7 +81,7 @@ ini::= entradas
 ;
 
 entradas ::= sentencias:a 
-            {: AST sen = new AST("sentencias") ; 
+            {: AST sen = new AST("sentencias") ; sen.simbolos = simbolos; System.out.println("CANTIDAD SIMBOLOS: "+sen.simbolos.size());
                 sen.hijos = ((List<AST>) a) ;  //System.out.println(e.hijos.size());
                 entrada.hijos.add(sen);
                 entrada.imprimirInfo(); graph += entrada.infoGraphviz(0)+"}"; System.out.println(graph); //funcion para graficar arbol:}
@@ -100,13 +100,13 @@ sentencias ::= sentencias:a sentencia:b {: List<AST> sentencias = (List<AST>)a ;
 
 metodo ::= PR_VOID ID:a PARIZQ lista_constructor:b PARDER LLAVIZQ sentencias:c LLAVDER 
         {: simbolos.add(new Simbolo(a, "Metodo", "void","-", aleft, aright));
-            AST metodo = new AST ("void "+a); AST parametros = new AST("parametros"); parametros.hijos =(List<AST>)b; metodo.hijos.add(parametros);
+            AST metodo = new AST ("void "+a+"()"); AST parametros = new AST("parametros"); parametros.hijos =(List<AST>)b; metodo.hijos.add(parametros);
             AST sens = new AST("sentencias"); sens.hijos =(List<AST>)c; metodo.hijos.add(sens); 
          RESULT=metodo; :}
 
              |PR_VOID ID:a PARIZQ PARDER LLAVIZQ sentencias:c LLAVDER 
         {: simbolos.add(new Simbolo(a, "Metodo", "void", "-", aleft, aright));
-        AST metodo = new AST ("void "+a); metodo.hijos.addAll((List<AST>) c) ;  
+        AST metodo = new AST ("void "+a+"()");  AST sens = new AST("sentencias"); sens.hijos =(List<AST>)c; metodo.hijos.add(sens);   
         RESULT=metodo;   :}
 ;
 
@@ -148,7 +148,7 @@ llamar_funcion ::= ID:a PARIZQ PARDER {:RESULT= new AST((String)a+"()")  ;:}
 
 sentencia ::= sentencia_print:a     {:RESULT=a;:}
             |sentencia_declaracion:a     {:RESULT= a ;:}
-            |actualizacion:a {:RESULT=a;:}
+            |actualizacion:a PTCOMA {:RESULT=a;:}
 
             | sentenciaIf:a   {:RESULT= a;:}
             | sentenciaFor:a  {:RESULT=a;:}
@@ -233,7 +233,6 @@ sentenciaDoWhile ::= PR_HACER LLAVIZQ sentencias:a LLAVDER PR_MIENTRAS PARIZQ ex
         RESULT=hacer; :}
 ;
 
-
 sentencia_print ::= PR_IMPRI PARIZQ expresion:a PARDER PTCOMA
     {:
        System.out.println("Debo retornar esto POR CONSOLA: (" + ((AST)a).dato +")" ); AST impri = new AST("imprimir()"); impri.hijos.add((AST)a);
@@ -244,12 +243,14 @@ sentencia_print ::= PR_IMPRI PARIZQ expresion:a PARDER PTCOMA
 ;
 
 sentencia_declaracion ::= tipo_dato:a ID:b IGUAL expresion:c PTCOMA 
-                                {: simbolos.add(new Simbolo(b, "Variable", (String) a, "global" , aleft, aright)); 
+                                {: Simbolo symb = new Simbolo(b, "Variable", (String) a, "global" , aleft, aright);symb.valor=((AST)c).getValor();
+                                    System.out.println("DECLARACION: "+b+" = "+symb.valor); ;simbolos.add(symb); 
                                     AST declara = new AST("declaracion"); declara.hijos.add(new AST((String)a)); 
                                     declara.hijos.add(new AST(b)); declara.hijos.add((AST)c);
                                     RESULT=declara ;:}
                         |ID:b IGUAL expresion:c PTCOMA 
-                            {:AST set = new AST("definicion"); set.hijos.add(new AST(b)); set.hijos.add((AST)c);RESULT=set ;:}
+                            {: //for(Simbolo symb: simbolos){if(symb.iden==(String)b){symb.valor =((AST)c).getValor(); break;}}
+                                AST set = new AST("definicion"); set.hijos.add(new AST(b)); set.hijos.add((AST)c);RESULT=set ;:}
                         |tipo_dato:a ID:b PTCOMA    
                                 {: simbolos.add(new Simbolo(b, "Variable", (String) a, "global" , aleft, aright)); 
                                     AST declara = new AST("declaracion"); declara.hijos.add(new AST((String)a)); 
@@ -267,8 +268,8 @@ incremento ::= ID:a MAS MAS
                 RESULT=incremento ;:}    
 ;
 decremento ::= ID:a MENOS MENOS 
-                {:AST decremento = new AST("declaracion"); decremento.hijos.add(new AST((String)a)); 
-                decremento.hijos.add(new AST("-")); decremento.hijos.add(new AST("-"));
+                {:AST decremento = new AST("decremento"); decremento.hijos.add(new AST((String)a)); 
+                decremento.hijos.add(new AST("-")); decremento.hijos.add(new AST("-"));System.out.println("Decremento encontrado");
                 RESULT=decremento ;:}    
 ;
 
@@ -305,7 +306,7 @@ expresion ::= expresion:a MAS expresion:b {: AST mas = new AST("+"); mas.hijos.a
             | expresion:a OR expresion:b {: AST or = new AST("||"); or.hijos.add((AST)a); or.hijos.add((AST)b); RESULT = or; :}
             | NOT expresion:b {: AST not = new AST("!"); not.hijos.add((AST)b); RESULT = not; :}
 
-            | PARIZQ expresion:a PARDER {:RESULT= new AST("("+a+")");:} 
+            | PARIZQ expresion:a PARDER {: AST par = new AST("()"); par.hijos.add(new AST((String)a));RESULT= par ;:} 
             | ENTERO:a {: RESULT= new AST(a); :}
             | DECIMAL:a {:RESULT= new AST(a);:}
             | ID:a {:RESULT= new AST(a);:}

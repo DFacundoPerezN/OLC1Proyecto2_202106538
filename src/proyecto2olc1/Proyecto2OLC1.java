@@ -15,19 +15,27 @@ public class Proyecto2OLC1 {
      */
     public static void main(String[] args) {
         
-        //new InterfazPrincipal().setVisible(true);
+        new InterfazPrincipal().setVisible(true);
                 
         String p = "void mimetodo(){\n" +
-"	entero x=10;\n" +
+"	entero x=9+1;\n" +
 "	cadena cad =\"holamundo\";\n" +
 "	si(x==10){\n" +
 "		imprimir(cad);\n" +
 "	}\n" +
 "\n" +
+"	selector(x){\n" +
+"		caso 1: \n" +
+"			imprimir(\"soy el caso 1\");\n" +
+"			cortar;\n" +
+"		pordefecto:\n" +
+"			imprimir(\"soy el caso por defecto\");\n" +
+"			cortar;\n" +
+"	}\n" +
 "	mimetodo2();\n" +
 "}\n" +
 "\n" +
-"void mimetodo2(entero h){\n" +
+"void mimetodo2(){\n" +
 "	entero h=0;\n" +
 "	mientras(h<10){\n" +
 "		imprimir(h);\n" +
@@ -37,11 +45,7 @@ public class Proyecto2OLC1 {
 "	}\n" +
 "}\n" +
 "\n" +
-"ejecutar mimetodo();"
-                + "entero suma(entero x, entero y){\n" +
-"	entero result = x+y;\n" +
-"	retorno result;\n" +
-"}";
+"ejecutar mimetodo();";
         
         String s = "entero suma(entero x, entero y){\n" +
 "	entero result = x+y;\n" +
@@ -95,8 +99,20 @@ public class Proyecto2OLC1 {
 "\n" +
 "ejecutar mimetodo();";
       
-        String graf = Analizador.TablaSimbolosHTML(p);
-        //System.out.println(graf);
+        String n ="void mimetodo(){\n" +
+"	imprimir(\"intentando\");"
+        + "mimetodo2();"
+        + "} " +
+    "void mimetodo2(){\n" +
+"	entero h=0;\n" +
+"mientras(h<10){\n" +
+"		imprimir(h);\n" +
+"                h=h+1;\n" +
+"}}"+
+"ejecutar mimetodo();";        
+        
+        //String graf = Analizador.TablaSimbolosHTML(n);
+        //String ass = Analizador.Salidas(n); System.out.println("---------Consola----------\n"+ass+"\n---------Fin consola----------");
     }
     
 }

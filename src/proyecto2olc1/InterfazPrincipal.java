@@ -234,14 +234,17 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         Analizadores.Scanner lexico  = new Analizadores.Scanner(new BufferedReader( new StringReader(texto)));
         Parser sintactico =new Parser(lexico);
         
+        String consola;
         try {
             sintactico.parse();
+            consola = Analizador.Salidas(texto);
+            //System.out.println(consola.length());
         }catch (Exception ex) {
             //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error fatal en compilación de entrada.");
+            consola = "//No lobre compilar el archivo";
         }
-        
-        
+        jTextArea2.setText(consola);
 
         
         
