@@ -49,11 +49,16 @@ public class Interprete {
         else{
             for (int i=this.arbolSintactico.hijos.size(); i>2; i--){
                 AST extraSino= this.arbolSintactico.hijos.get(i-1);
-                if(extraSino.dato.equals("sino")){
-                    salida += extraSino.hijos.get(0).EjecutarSentencias(extraSino); 
+                if(extraSino.dato.equals("sino") && condicion.contains("alse")){
+                    salida += extraSino.hijos.get(0).EjecutarSentencias(this.arbolSintactico); 
                 }else{
-                    Interprete inter = new Interprete(extraSino, this.simbolos);
-                    salida += inter.ejecutarSentenciaIf();
+                    condicion = extraSino.hijos.get(0).hijos.get(0).getValor(); System.out.println("condicion cambio a: "+condicion);
+                    if(condicion.contains("rue")){
+                        salida += extraSino.hijos.get(1).EjecutarSentencias(this.arbolSintactico);
+                        break;
+                    }            
+                    //Interprete inter = new Interprete(extraSino, this.simbolos);
+                    //salida += inter.ejecutarSentenciaIf();
                 }
             }
         }
