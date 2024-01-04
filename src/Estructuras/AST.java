@@ -202,19 +202,27 @@ public class AST {
             case "imprimir()" -> {
                 Interprete inter = new Interprete(sentencia, this.simbolos);
                 salidas += "\n"+inter.ejecutarSentenciaImprimir();
-                }
+            }
             case "si" -> {
                 Interprete inter = new Interprete(sentencia, this.simbolos);
                 salidas += inter.ejecutarSentenciaIf();
-                }
+            }
             case "mientras" -> {
                 Interprete inter = new Interprete(sentencia, this.simbolos);
                 salidas += inter.ejecutarSentenciaWhile();
-                }
+            }
             case "para" -> {
                 Interprete inter = new Interprete(sentencia, this.simbolos);
                 salidas += inter.ejecutarSentenciaFor();
-                }
+            }
+            case "hacer mientras" -> {
+                Interprete inter = new Interprete(sentencia, this.simbolos);
+                salidas += inter.ejecutarSentenciaDoWhile();
+            }
+            case "selector" -> {
+                Interprete inter = new Interprete(sentencia, this.simbolos);
+                salidas += inter.ejecutarSentenciaSwitch();
+            }
             case "incremento" -> {
                 for(Simbolo sim: Analizadores.Parser.simbolos){
                     if(sim.iden.equals(sentencia.hijos.get(0).dato)){
@@ -224,7 +232,7 @@ public class AST {
                         sim.valor = String.valueOf(aumentado);
                     }
                 }//System.out.println("succes in decrement");
-                }
+            }
             case "decremento" -> {
                 for(Simbolo sim: Analizadores.Parser.simbolos){
                     if(sim.iden.equals(sentencia.hijos.get(0).dato)){

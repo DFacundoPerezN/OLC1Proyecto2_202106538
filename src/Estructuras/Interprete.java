@@ -113,6 +113,37 @@ public class Interprete {
         }    
         return salida;
     }
+        
+    public String ejecutarSentenciaDoWhile(){
+        String salida = "";
+        
+        String condicion = "";
+        do{
+            salida += this.arbolSintactico.hijos.get(0).EjecutarSentencias(this.arbolSintactico);
+            //System.out.println(this.arbolSintactico.hijos.get(1).dato);
+            condicion = this.arbolSintactico.hijos.get(1).hijos.get(0).getValor();  
+            System.out.println("condicion = "+condicion);          
+        }while( condicion.contains("rue"));  
+        return salida;
+    }
+    
+    public String ejecutarSentenciaSwitch(){
+        String salida = "";
+        
+        String valor = this.arbolSintactico.hijos.get(0).getValor();
+        for (AST caso : this.arbolSintactico.hijos.get(1).hijos){
+            if(caso.dato.equals("caso") && caso.hijos.get(0).dato.equals(valor)){
+                salida += caso.hijos.get(1).EjecutarSentencias(this.arbolSintactico);
+                break;
+            }
+            else if(caso.dato.equals("pordefecto")){
+                salida += caso.hijos.get(0).EjecutarSentencias(this.arbolSintactico);
+                break;
+            }
+        }
+        
+        return salida;
+    }
     
     public static Map<String,String> defaults = Map.ofEntries(
             entry("entero","0"), entry("doble","0.0"), entry("binario","true"), entry("caracter","'\\u0000'"), entry("cadena","\"\"")

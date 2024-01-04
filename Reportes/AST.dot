@@ -5,42 +5,220 @@ n0[label="Entrada"];
 n0 -> n1
 n1[label="sentencias"];
 n1 -> n2
-n2[label="void main()"];
+n2[label="void metodo2()"];
 n2 -> n3
 n3[label="sentencias"];
 n3 -> n4
-n4[label="para"];
+n4[label="declaracion"];
 n4 -> n5
-n5[label="declaracion"];
-n5 -> n6
-n6[label="entero"];
-n5 -> n7
-n7[label="i"];
-n5 -> n8
-n8[label="10"];
-n4 -> n9
-n9[label="condicion"];
-n9 -> n10
-n10[label=">"];
+n5[label="entero"];
+n4 -> n6
+n6[label="x"];
+n4 -> n7
+n7[label="0"];
+n3 -> n8
+n8[label="selector"];
+n8 -> n9
+n9[label="x"];
+n8 -> n10
+n10[label="casos"];
 n10 -> n11
-n11[label="i"];
-n10 -> n12
-n12[label="0"];
-n4 -> n13
-n13[label="decremento"];
+n11[label="caso"];
+n11 -> n12
+n12[label="10"];
+n11 -> n13
+n13[label="sentencias"];
 n13 -> n14
-n14[label="i"];
-n13 -> n15
-n15[label="-"];
-n13 -> n16
-n16[label="-"];
-n4 -> n17
-n17[label="sentencias"];
+n14[label="definicion"];
+n14 -> n15
+n15[label="x"];
+n14 -> n16
+n16[label="0"];
+n10 -> n17
+n17[label="caso"];
 n17 -> n18
-n18[label="imprimir()"];
-n18 -> n19
-n19[label="i"];
-n1 -> n20
-n20[label="ejecutar main()"];
+n18[label="14"];
+n17 -> n19
+n19[label="sentencias"];
+n19 -> n20
+n20[label="definicion"];
+n20 -> n21
+n21[label="x"];
+n20 -> n22
+n22[label="1"];
+n10 -> n23
+n23[label="pordefecto"];
+n23 -> n24
+n24[label="sentencias"];
+n24 -> n25
+n25[label="definicion"];
+n25 -> n26
+n26[label="x"];
+n25 -> n27
+n27[label="2"];
+n10 -> n28
+n28[label="caso"];
+n28 -> n29
+n29[label="14"];
+n28 -> n30
+n30[label="sentencias"];
+n30 -> n31
+n31[label="definicion"];
+n31 -> n32
+n32[label="x"];
+n31 -> n33
+n33[label="1"];
+n10 -> n34
+n34[label="caso"];
+n34 -> n35
+n35[label="10"];
+n34 -> n36
+n36[label="sentencias"];
+n36 -> n37
+n37[label="definicion"];
+n37 -> n38
+n38[label="x"];
+n37 -> n39
+n39[label="0"];
+n3 -> n40
+n40[label="selector"];
+n40 -> n41
+n41[label="x"];
+n40 -> n42
+n42[label="casos"];
+n42 -> n43
+n43[label="caso"];
+n43 -> n44
+n44[label="1"];
+n43 -> n45
+n45[label="sentencias"];
+n45 -> n46
+n46[label="definicion"];
+n46 -> n47
+n47[label="x"];
+n46 -> n48
+n48[label="2"];
+n42 -> n49
+n49[label="caso"];
+n49 -> n50
+n50[label="2"];
+n49 -> n51
+n51[label="sentencias"];
+n51 -> n52
+n52[label="definicion"];
+n52 -> n53
+n53[label="x"];
+n52 -> n54
+n54[label="*"];
+n54 -> n55
+n55[label="x"];
+n54 -> n56
+n56[label="2"];
+n42 -> n57
+n57[label="pordefecto"];
+n57 -> n58
+n58[label="sentencias"];
+n58 -> n59
+n59[label="definicion"];
+n59 -> n60
+n60[label="x"];
+n59 -> n61
+n61[label="0"];
+n42 -> n62
+n62[label="caso"];
+n62 -> n63
+n63[label="2"];
+n62 -> n64
+n64[label="sentencias"];
+n64 -> n65
+n65[label="definicion"];
+n65 -> n66
+n66[label="x"];
+n65 -> n67
+n67[label="*"];
+n67 -> n68
+n68[label="x"];
+n67 -> n69
+n69[label="2"];
+n42 -> n70
+n70[label="caso"];
+n70 -> n71
+n71[label="1"];
+n70 -> n72
+n72[label="sentencias"];
+n72 -> n73
+n73[label="definicion"];
+n73 -> n74
+n74[label="x"];
+n73 -> n75
+n75[label="2"];
+n3 -> n76
+n76[label="selector"];
+n76 -> n77
+n77[label="x"];
+n76 -> n78
+n78[label="casos"];
+n78 -> n79
+n79[label="caso"];
+n79 -> n80
+n80[label="1"];
+n79 -> n81
+n81[label="sentencias"];
+n81 -> n82
+n82[label="definicion"];
+n82 -> n83
+n83[label="x"];
+n82 -> n84
+n84[label="0"];
+n78 -> n85
+n85[label="caso"];
+n85 -> n86
+n86[label="2"];
+n85 -> n87
+n87[label="sentencias"];
+n87 -> n88
+n88[label="definicion"];
+n88 -> n89
+n89[label="x"];
+n88 -> n90
+n90[label="1"];
+n78 -> n91
+n91[label="pordefecto"];
+n91 -> n92
+n92[label="sentencias"];
+n92 -> n93
+n93[label="imprimir()"];
+n93 -> n94
+n94[label="x"];
+n92 -> n95
+n95[label="imprimir()"];
+n95 -> n96
+n96[label="\"entro al pordefecto\""];
+n78 -> n97
+n97[label="caso"];
+n97 -> n98
+n98[label="2"];
+n97 -> n99
+n99[label="sentencias"];
+n99 -> n100
+n100[label="definicion"];
+n100 -> n101
+n101[label="x"];
+n100 -> n102
+n102[label="1"];
+n78 -> n103
+n103[label="caso"];
+n103 -> n104
+n104[label="1"];
+n103 -> n105
+n105[label="sentencias"];
+n105 -> n106
+n106[label="definicion"];
+n106 -> n107
+n107[label="x"];
+n106 -> n108
+n108[label="0"];
+n1 -> n109
+n109[label="ejecutar metodo2()"];
 }
 }
