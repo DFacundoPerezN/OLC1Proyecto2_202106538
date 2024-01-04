@@ -211,6 +211,10 @@ public class AST {
                 Interprete inter = new Interprete(sentencia, this.simbolos);
                 salidas += inter.ejecutarSentenciaWhile();
                 }
+            case "para" -> {
+                Interprete inter = new Interprete(sentencia, this.simbolos);
+                salidas += inter.ejecutarSentenciaFor();
+                }
             case "incremento" -> {
                 for(Simbolo sim: Analizadores.Parser.simbolos){
                     if(sim.iden.equals(sentencia.hijos.get(0).dato)){

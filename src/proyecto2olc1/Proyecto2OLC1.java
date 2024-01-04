@@ -28,6 +28,9 @@ public class Proyecto2OLC1 {
 "		caso 1: \n" +
 "			imprimir(\"soy el caso 1\");\n" +
 "			cortar;\n" +
+"		caso 2: \n" +
+"			imprimir(\"soy el caso 2\");\n" +
+"			cortar;\n" +
 "		pordefecto:\n" +
 "			imprimir(\"soy el caso por defecto\");\n" +
 "			cortar;\n" +
@@ -37,9 +40,9 @@ public class Proyecto2OLC1 {
 "\n" +
 "void mimetodo2(){\n" +
 "	entero h=0;\n" +
-"	mientras(h<10){\n" +
+"	hacer{\n" +
 "		imprimir(h);\n" +
-"	}\n" +
+"	}mientras(h<10);\n" +
 "	para(entero i=0; i<10; i++){\n" +
 "		imprimir(i);\n" +
 "	}\n" +
@@ -144,7 +147,7 @@ public class Proyecto2OLC1 {
 "\n" +
 "ejecutar metodo1();";
         
-        //String graf = Analizador.TablaSimbolosHTML(s);
+        //String graf = Analizador.TablaSimbolosHTML(p);
         //String ass = Analizador.Salidas(c); System.out.println("---------Consola----------\n"+ass+"\n---------Fin consola----------");
     }
     

@@ -68,8 +68,48 @@ public class Interprete {
         while( condicion.contains("rue")){
             salida += this.arbolSintactico.hijos.get(1).EjecutarSentencias(this.arbolSintactico);
             //System.out.println(this.arbolSintactico.hijos.get(1).dato);
-            condicion = this.arbolSintactico.hijos.get(0).hijos.get(0).getValor();
-            
+            condicion = this.arbolSintactico.hijos.get(0).hijos.get(0).getValor();            
+        }    
+        return salida;
+    }
+    
+        public String ejecutarSentenciaFor(){
+        String salida = "";
+        //Parte de la declaracion
+        AST declaracion = this.arbolSintactico.hijos.get(0);
+        for(Simbolo sim: Analizadores.Parser.simbolos){
+            if(sim.iden.equals(declaracion.hijos.get(1).dato)){
+                if(declaracion.hijos.size()>2){
+                    String cambiada = declaracion.hijos.get(2).getValor();
+                    sim.valor = cambiada;
+                }else{
+                    String cambiada = Interprete.defaults.get(declaracion.hijos.get(0).dato);
+                    sim.valor = cambiada;
+                }
+            }
+        }
+        //condicion
+        String condicion = this.arbolSintactico.hijos.get(1).hijos.get(0).getValor();
+        //ciclo
+        while( condicion.contains("rue")){
+            //sentencias
+            salida += this.arbolSintactico.hijos.get(3).EjecutarSentencias(this.arbolSintactico);
+            //actualizacion
+            AST actualizacion =  this.arbolSintactico.hijos.get(2);
+            //System.out.println("actualizacion tipo: "+ actualizacion.dato);   
+            for(Simbolo sim: Analizadores.Parser.simbolos){
+                if(sim.iden.equals(actualizacion.hijos.get(0).dato)){
+                    if(actualizacion.dato.equals("incremento")){
+                        int aumentado = Integer.valueOf(actualizacion.hijos.get(0).getValor())+1;                        
+                        sim.valor = String.valueOf(aumentado);
+                    }else{
+                        int aumentado = Integer.valueOf(actualizacion.hijos.get(0).getValor())-1;                        
+                        sim.valor = String.valueOf(aumentado);
+                    }
+                }
+            }
+            //condicion = this.arbolSintactico.hijos.get(1).hijos.get(0).getValor();    
+            System.out.println("condicion = "+condicion);
         }    
         return salida;
     }

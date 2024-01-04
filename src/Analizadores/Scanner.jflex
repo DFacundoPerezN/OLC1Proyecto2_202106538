@@ -68,11 +68,7 @@ comentarioSimple = "//"(InputCharacter)*(LineTerminator)?
     System.out.println("Reconocio PR: "+yytext()); 
     //lexemas.add( new Lexema(yytext(),"Palabra Reservada",yyline,yychar));
     return new Symbol(sym.PR_VOID,yyline,yychar,yytext());}     
-"main" {  
-    System.out.println("Reconocio PR: "+yytext()); 
-    //lexemas.add( new Lexema("main","Palabra Reservada",yyline,yychar));
-    return new Symbol(sym.PR_MAIN,yyline,yychar,yytext());         
-} 
+
 
 "entero" {  
     System.out.println("Reconocio PR: "+yytext()); 

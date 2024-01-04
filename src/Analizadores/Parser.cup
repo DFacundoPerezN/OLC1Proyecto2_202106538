@@ -38,7 +38,6 @@ terminal String ID;
 terminal String STR,CHAR;
 terminal String POTENCIA, MODULO;
 terminal String PR_VOID;
-terminal String PR_MAIN,PR_DGLOBALES ;
 terminal String PR_ENTERO;
 terminal String PR_CADENA, PR_CHAR;
 terminal String PR_DOBLE; 
@@ -192,7 +191,7 @@ sentenciasElse ::= PR_SINO PR_SI PARIZQ expresion:a PARDER LLAVIZQ sentencias:b 
 
 sentenciaFor ::= PR_PARA PARIZQ sentencia_declaracion:a  expresion:b PTCOMA actualizacion:c PARDER LLAVIZQ sentencias:d LLAVDER 
             {: AST para = new AST("para"); para.hijos.add((AST) a);  AST cond = new AST("condicion"); cond.hijos.add((AST) b);  //System.out.println("para declaracion bien" );
-                para.hijos.add((AST) c);
+                para.hijos.add(cond); para.hijos.add((AST) c);
                 AST sentencias =  new AST("sentencias"); sentencias.hijos = ((List<AST>) d); para.hijos.add(sentencias); 
                 RESULT=para; :}
 ;
